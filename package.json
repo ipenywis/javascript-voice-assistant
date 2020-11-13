@@ -1,0 +1,38 @@
+{
+  "name": "voice-assistant",
+  "version": "1.0.0",
+  "description": "Voice assistant that serves voical commands using Javascript and Tensorflow Explained on Coderone's youtube channel",
+  "main": "index.js",
+  "author": "Islem Maboud",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "webpack",
+    "watch": "webpack --watch",
+    "start:dev": "webpack-cli serve --port 3000 --mode development"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.12.3",
+    "@babel/plugin-external-helpers": "^7.12.1",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-proposal-export-default-from": "^7.12.1",
+    "@babel/polyfill": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "babel-loader": "^8.2.1",
+    "copy-webpack-plugin": "^6.3.0",
+    "css-loader": "^5.0.1",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.0.0-alpha.14",
+    "style-loader": "^2.0.0",
+    "webpack": "^5.4.0",
+    "webpack-cli": "^4.2.0",
+    "webpack-dev-server": "^3.11.0"
+  },
+  "dependencies": {
+    "@foobar404/wave": "^1.2.7",
+    "@tensorflow-models/speech-commands": "^0.4.2",
+    "@tensorflow/tfjs": "^2.7.0",
+    "wave-visualizer": "^1.0.5",
+    "wavesurfer.js": "^4.2.0"
+  }
+}
