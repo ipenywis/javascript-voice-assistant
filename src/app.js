@@ -1,30 +1,44 @@
+import { getWeather } from "./api";
+import { wait } from "./utils";
 import VoiceAssistant from "./voiceAssistant";
 import VoiceVisualizer from "./voiceVisualizer";
 
 const startButton = document.getElementById("start-btn");
-const wordPreviewContainer = document.getElementById("word-preview");
 
-let listeningStarted = false;
+let isStarted = false;
 let processingWord = null;
+
 const voiceVisualizer = new VoiceVisualizer();
 const voiceAssistant = new VoiceAssistant();
 
-const wait = (s) => new Promise((rs) => setTimeout(rs, s));
-
-function saySpeech(text) {
-  const wordUtrance = new window.SpeechSynthesisUtterance(text);
-  window.speechSynthesis.speak(wordUtrance);
-}
-
-function writeWord(word) {
-  wordPreviewContainer.innerText = word;
-}
-
 async function processWord(word) {
-  writeWord(word);
   switch (word) {
     case "Hello":
-      saySpeech("Hello Islem, How are you doing?");
+      voiceAssistant.saySpeech("Hello Islem, How are you doing today?");
+      await wait(3000);
+      break;
+    case "Weather":
+      const location = "London";
+      const weather = await getWeather(location);
+      voiceAssistant.saySpeech(
+        `The weather for today in ${location} is ${weather} degrees`
+      );
+      await wait(3000);
+      break;
+    case "Good Morning":
+      voiceAssistant.saySpeech(
+        "Good Morning islem, Hope you slept well, for Today's schedule you have a meeting at 10am with you manager"
+      );
+      await wait(3000);
+      break;
+    case "Play a Song":
+      voiceAssistant.saySpeech(
+        "We are friends in a sleeping bag splitting the heat"
+      );
+      voiceAssistant.saySpeech(
+        "We have one filthy pillow to share and your lips are in my hair"
+      );
+      voiceAssistant.saySpeech("Someone upstairs has a rat that we laughed at");
       await wait(3000);
       break;
   }
@@ -32,30 +46,28 @@ async function processWord(word) {
   processingWord = null;
 }
 
-function onListen(labels, word) {
+function onListen(word) {
   if (processingWord) return;
 
-  processingWord = word;
   console.log("Word: ", word);
+  processingWord = word;
   processWord(word);
 }
 
 startButton.onclick = async () => {
-  //Start/Stop audio visualization
-  if (!listeningStarted) {
+  if (!isStarted) {
+    //Start assistant
     startButton.innerText = "Starting...";
-    await voiceAssistant.initialize(onListen);
+    await voiceAssistant.startAssistant(onListen);
     await voiceVisualizer.startVisualization();
-    listeningStarted = true;
-    startButton.innerText = "Stop Listening";
+    isStarted = true;
+    startButton.innerText = "Stop Assistant";
   } else {
+    //Stop assistant
     startButton.innerText = "Stopping...";
-    listeningStarted = false;
+    await voiceAssistant.stopAssistant();
     voiceVisualizer.stopVisualization();
-    await voiceAssistant.stop();
-    startButton.innerText = "Start Listening";
+    isStarted = false;
+    startButton.innerText = "Start Assistant";
   }
 };
-
-// const voiceAssistant = new VoiceAssistant();
-// voiceAssistant.initialize();
